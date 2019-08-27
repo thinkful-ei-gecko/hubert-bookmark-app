@@ -3,6 +3,13 @@
 
 $(document).ready(function() {
   console.log('index.js is loading');
-  bookmarkList.init();
-
+  bookmarkList.eventListeners();
+  bookmarkList.render();
+  
+  api.getBookmark()
+    //.then(res => res.json())
+    .then(lists => {
+      lists.forEach(list => STORE.addList(list));
+      bookmarkList.render();
+    });
 });

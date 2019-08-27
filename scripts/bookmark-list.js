@@ -1,10 +1,11 @@
 'use strict';
-/* global STORE, $ */
+/* global api, STORE, $ */
 
 // eslint-disable-next-line no-unused-vars
 
 const bookmarkList = (function() {
 
+	
   function toggleForm() {
     $('.toggle-form').on('click', event => {
       event.preventDefault();
@@ -16,43 +17,37 @@ const bookmarkList = (function() {
       render();
     });
   }
-	
-  /*
-  function hideForm() {
-    STORE.adding ? $('.toggle-form').text('Close') : $('.toggle-form').text('Add');
-  }
-*/
 
   function addButtonForm() {
     return `
 				<fieldset class="js-new-list">
         <div class="form-group">
-            <label for="bookmark-title">Title</label>
-            <input required type="text" id="bookmark-title" name="bookmark-title" placeholder="e.g. Google">
+            <label class="bookmark-title" for="bookmark-title">Title</label>
+            <input required type="text" id="bookmark-title" name="title" placeholder="e.g. Google">
         </div>
         <div class="form-group">
-            <label for="bookmark-url">URL</label>
-            <input required type="text" id="bookmark-url" name="bookmark-url" placeholder="http://www.google.com" disable="false" id="bookmark-url">
+            <label class="bookmark-url" for="bookmark-url">URL</label>
+            <input required type="text" id="bookmark-url" name="url" placeholder="http://www.google.com" disable="false" id="bookmark-url">
         </div>
         <div class="form-group" id="bookmark-rating">
-            <label for="bookmark-rating">Rating</label>
-            <input type="radio" class="form-check" id="rating-value" name="same" value="1">
+            <label class="bookmark-rating" for="bookmark-rating">Rating</label>
+            <input type="radio" class="form-check" id="rating-value" name="rating" value="1">
             <label class="form-check-label" for="1">1</label>
 
-            <input type="radio" class="form-check" id="rating-value" name="same" value="2">
+            <input type="radio" class="form-check" id="rating-value" name="rating" value="2">
             <label class="form-check-label" for="2">2</label>
 
-            <input type="radio" class="form-check" id="rating-value" name="same" value="3">
+            <input type="radio" class="form-check" id="rating-value" name="rating" value="3">
             <label class="form-check-label" for="3">3</label>
 
-            <input type="radio" class="form-check" id="rating-value" name="same" value="4">
+            <input type="radio" class="form-check" id="rating-value" name="rating" value="4">
             <label class="form-check-label" for="4">4</label>
 
-            <input type="radio" class="form-check" id="rating-value" name="same" value="5">
+            <input type="radio" class="form-check" id="rating-value" name="rating" value="0">
             <label class="form-check-label" for="5">5</label>
         </div>
-            <label for="bookmark-description">Description</label>
-            <textarea required rows="5" cols="50" class="form-description" id="bookmark-description" placeholder="Your description"></textarea>
+            <label class="bookmark-description" for="bookmark-description">Description</label>
+            <textarea required rows="5" cols="50" class="form-description" name="desc" id="bookmark-description" placeholder="Your description"></textarea>
 				<div class="form-group" id="bookmark-buttons">
 						<button type="submit" class="submit-button">Submit</button>
 						<button class="cancel-button">Cancel</button>
@@ -61,34 +56,54 @@ const bookmarkList = (function() {
         `;
   }
 	
+  //cannot get the toggle expand/collapse
   function generateBookmarkList(bookmark) {
-    return `
-		<li class="bookmark-item data-item-id=${bookmark.id}">
-		`;
-  }
-	
-  function getBookmarkValues() {
-    $('.submit-button').submit( () => {
-      event.preventDefault();
-      const title = $('#bookmark-title').val();
-      const url = $('#bookmark-url').val();
-      const description = $('#bookmark-description').val();
-      //const rating = $('#bookmark-rating').val();
-      const item = {
-        title,
-        url,
-        description,
-        rating
-      };
-    });
-  }
-	
+    const emptyStar = '<span class="icon">★</span>';
+    const checkedStar = '<span class="icon checked">★</span>';
+    let generateStars = emptyStar.repeat(5);
 
+    const starRating = bookmark.rating;
+    
+    if (starRating === 5) {
+      generateStars = `${checkedStar.repeat(5)}`;
+    } else if (starRating === 4) {
+      generateStars = `${checkedStar.repeat(4)} ${emptyStar.repeat(1)}`;
+    } else if (starRating === 3) {
+      generateStars = `${checkedStar.repeat(3)} ${emptyStar.repeat(2)}`;
+    } else if (starRating === 2) {
+      generateStars = `${checkedStar.repeat(2)} ${emptyStar.repeat(3)}`;
+    } else if (starRating === 1) {
+      generateStars = `${checkedStar.repeat(1)} ${emptyStar.repeat(4)}`;
+    }
+
+    const expandedList = `
+		<li class="expanded bookmark-list-item" data-item-id="${bookmark.id}">
+		<button aria-label="${bookmark.title}" class="bookmark-title js-bookmark-title expand-button">
+		<h2>${bookmark.title}</h2>
+		<div class="rated-stars">${generateStars}</div> 
+		</button>
+		<p class="js-bookmark-description">${bookmark.desc}</p>
+		<button aria-label="delete bookmark" class="js-delete-bookmark">Delete</button>
+    <a href="${bookmark.url}" target="blank" class="js-bookmark-url" aria-label="Visit ${bookmark.title} Website">Visit Site</a>
+    </li>
+    `;
+    if(bookmark.expanded) {
+      return `${expandedList}`;
+    }
+    return `<li data-item-id="${bookmark.id}" class="bookmark-list-item">
+    <button aria-label="${bookmark.title} bookmark that has ${bookmark.rating} stars" class="bookmark-title collapse-button js-bookmark-title">
+    <h2>${bookmark.title}</h2>
+    <div class="rated-stars" aria-label="${bookmark.rating} stars">${generateStars}</div>
+    </button>
+    </li>`;
+  }
+	
   function cancelFormButton() {
     $('.new-list').on('click', '.cancel-button', event => {
       event.preventDefault();
       $('.js-new-list').remove();
       STORE.toggleAdding();
+      render();
     });
   }
 
@@ -99,30 +114,125 @@ const bookmarkList = (function() {
     return lists.join('');
   }
 
+  //INCOMPLETE
+  function renderError() {
+    if(STORE.error) {
+      const el = generateError(STORE.error);
+      $('.error-container').html(el);
+    } else {
+      $('.error-container').empty();
+    }
+  }
+
+  function generateError(errorMessage) {
+    return `
+    <section class="error-content">
+        <button id="cancel-error">X</button>
+        <p>${errorMessage}</p>
+      </section>
+    `;
+  }
+
   //Non-functional
   function render() {
-    let lists = [...STORE.lists];
     //if (STORE.rating)
-
+    let lists = [...STORE.lists];
     // renders bookmark list to the DOM
     const bookmarkListString = generateBookmarkItems(lists);
 
     // Inserts HTML into the DOM
     $('.bookmark-list').html(bookmarkListString);
+    
+    if(STORE.filterBy) {
+      lists = STORE.lists.filter(item => item.rating > STORE.filterBy);
+    }
   }
 	
   function getIdFromElement(item) {
+    console.log($(item).closest('.bookmark-list-item').data('item-id'));
     return $(item)
-      .closest('.bookmark-item')
+      .closest('.bookmark-list-item')
       .data('item-id');
   }
 
-  function handleNewBookmarkSubmit() {
-
+  //Converts form values into JSON
+  function serializeJson(form) {
+    const formData = new FormData(form);
+    const o = {};
+    formData.forEach((val,name) => o[name] = val);
+    return JSON.stringify(o);
   }
 
-  function handleDeleteBookmarkClick() {
+  //Does not send data to API
+  function handleNewBookmarkSubmit() {
+    $('body').on('submit', '.new-list', event => {
+      event.preventDefault();
 
+      let formElement = $('.new-list')[0];
+      let serial = serializeJson(formElement);
+		
+      api.createBookmark(serial)
+        .then((newBookmark) => {
+          STORE.addList(newBookmark);
+          STORE.toggleExpand();
+          render();
+        })
+        .catch(err => {
+          STORE.setError(err.message);
+          renderError();
+        });
+    });
+  }
+  
+  function handleBookmarkExpand() {
+    $('.bookmark-list').on('click', '.js-bookmark-title', event => {
+      const ID = getIdFromElement(event.currentTarget);
+      const currentList = STORE.findById(ID);
+      currentList.expanded = true;
+      //console.log(currentList.expanded);
+      render();
+    });
+  }
+  //Incomplete/*
+  function handleBookmarkCollapse(){
+    $('.bookmark-list').on('click','.js-bookmark-title', event => {
+      const ID = getIdFromElement(event.currentTarget);
+      const currentList = STORE.findById(ID);
+      currentList.expanded = true;
+      render();
+    });
+  }
+
+
+  function handleDeleteBookmarkClick() {
+    $('.bookmark-list').on('click', '.js-delete-bookmark', event => {
+      const id = getIdFromElement(event.currentTarget);
+      console.log(id)
+      api.deleteBookmark(id)
+        .then(() => {
+          STORE.findAndDelete(id);
+          render();
+        })
+        .catch(err => {
+          STORE.setError(err.message);
+          renderError();
+        })
+    })
+  }
+	
+  function handleFilterRating() {
+    $('.bookmark-filter').on('change', function(e) {
+      let selectRating = $(this).val();
+      STORE.setFilter(selectRating);
+      render();
+    });
+  }
+
+  function handleCloseError() {
+    $('.error-container').on('click', '#cancel-error', () => {
+      STORE.setError(null);
+      renderError();
+    });
   }
 
   function eventListeners() {
@@ -131,10 +241,14 @@ const bookmarkList = (function() {
     toggleForm();
     handleDeleteBookmarkClick();
     handleNewBookmarkSubmit();
+    handleBookmarkExpand();
+    handleFilterRating();
+    handleBookmarkCollapse();
+    handleCloseError();
   }
 
   return {
-    render,
-    eventListeners
+    eventListeners,
+    render
   };
 } ());

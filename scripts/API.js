@@ -1,7 +1,7 @@
 'use strict';
 
 const api = (function() {
-  const BASE_URL = 'https://thinkful-list-api.herokuapp.com/HubertY';
+  const BASE_URL = 'https://thinkful-list-api.herokuapp.com/HubertYang';
   
   //requests server data and returns a json object
   const apiFetch = function(...args) {
@@ -25,13 +25,12 @@ const api = (function() {
 
   //the 'post' method creates a bookmark entry in our api
   const createBookmark = function(name) {
-    const newData = JSON.stringify({name});
     return apiFetch(`${BASE_URL}/bookmarks`, {
       method: 'POST',
       headers: new Headers({
         'Content-type': 'application/json'
       }),
-      body: newData
+      body: name
     });
   };
 

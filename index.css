@@ -1,0 +1,175 @@
+* {
+    box-sizing: border-box;
+    padding: 1px;
+}
+
+header {
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+h1 {
+    width: 50%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: center;
+}
+
+form {
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+#bookmark-list-form {
+    display: block;
+    margin: 5px 5px;
+}
+
+.toggle-form {
+    margin: 5px 5px;
+}
+
+ul {
+    display: inline-block;
+    text-align: left;
+    margin-left: 0%;
+}
+
+ul .bookmark-list-item {
+    display: block;
+    border-radius: 2px;
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+
+.filter-selector {
+    display: block;
+    text-decoration: underline;
+}
+
+.js-bookmark-title {
+    background-color: white;
+    border-radius: none;
+    padding: 0px;
+    border-width: 0;
+}
+
+.cancel-button, .submit-button, .toggle-form {
+	-moz-box-shadow: 0px 0px 0px 2px #43527a;
+	-webkit-box-shadow: 0px 0px 0px 2px #43527a;
+	box-shadow: 0px 0px 0px 2px #43527a;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
+	background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+	background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+	background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+	background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+	background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#7892c2', endColorstr='#476e9e',GradientType=0);
+	background-color:#7892c2;
+	-moz-border-radius:42px;
+	-webkit-border-radius:42px;
+	border-radius:42px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:6px 23px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #283966;
+}
+.cancel-button:hover, .submit-button:hover, .toggle-form:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+	background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
+	background-color:#476e9e;
+}
+.cancel-button:active, .submit-button:active, .toggle-form:hover {
+	position:relative;
+	top:1px;
+}
+
+.rating:not(:hover) label input:checked ~ .icon,
+.rating:hover label:hover input ~ .icon {
+  color: #ecba14;
+}
+
+.rated-stars {
+    display: flex;
+    justify-content: flex-start;
+}
+  
+.rated-stars span {
+    position: relative;
+    color: #ccc;
+}
+
+.rated-stars span.checked {
+    color: #ecba14;
+}
+
+.js-bookmark-url {
+    margin: right;
+    float: right;
+    border: 2px solid black;
+    background-color: white;
+    color: black;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    border-color: black;
+    border-radius: 11px;
+}
+
+.js-bookmark-url:hover {
+    background:black;
+    color: white;
+}
+
+.js-delete-bookmark {
+    border: 2px solid black;
+    background-color: white;
+    color: black;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    color: red;
+    border-color: #f44336;
+    border-radius: 11px;
+}
+
+.js-delete-bookmark:hover {
+    background: #f44336;
+    color: white;
+}
+
+.js-bookmark-title {
+    display: inline-block;
+}
+
+.error-container {
+    float: right;
+    clear: left;
+    background-color: red;
+}
+
+fieldset {
+    display:block;
+}
+
+.bookmark-description, .bookmark-title, .bookmark-url, .bookmark-rating{
+    display: block;
+}
+
+ul.bookmark-list {
+    border: 2px solid rgba(204, 204, 204, 0.685);
+    background-color: rgba(255, 255, 255, 0.63);
+    width: 100%;
+}
+
