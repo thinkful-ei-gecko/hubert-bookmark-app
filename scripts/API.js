@@ -1,6 +1,6 @@
 'use strict';
 
-const API = (function() {
+const api = (function() {
   const BASE_URL = 'https://thinkful-list-api.herokuapp.com/HubertY';
 	
   const apiFetch = function(...args) {

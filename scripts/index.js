@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 
 $(document).ready(function() {
-    bookmarkList.init();
+  console.log('index.js is loading');
+  bookmarkList.init();
 
 });
