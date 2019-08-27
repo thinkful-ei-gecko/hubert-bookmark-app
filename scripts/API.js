@@ -2,7 +2,8 @@
 
 const api = (function() {
   const BASE_URL = 'https://thinkful-list-api.herokuapp.com/HubertY';
-	
+  
+  //requests server data and returns a json object
   const apiFetch = function(...args) {
     return fetch(...args)
       .then(response => {
@@ -17,6 +18,7 @@ const api = (function() {
       .catch(error => console.log(`There is an ${error.message}`));
   };
 
+  //gets all bookmark lists from the server
   const getBookmark = function() {
     return apiFetch(`${BASE_URL}/bookmarks`);
   };

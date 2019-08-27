@@ -6,22 +6,26 @@
 const bookmarkList = (function() {
 
   function toggleForm() {
-    $('.toggle-form').on('click', function(event) {
+    $('.toggle-form').on('click', event => {
+      event.preventDefault();
       STORE.toggleAdding();
-      $('.new-list').html(addButtonForm);
-      hideForm();
+      if (STORE.adding === true) {
+        $('.new-list').html(addButtonForm);
+      }
       //need to invoke render() here
       render();
     });
   }
-
+	
+  /*
   function hideForm() {
     STORE.adding ? $('.toggle-form').text('Close') : $('.toggle-form').text('Add');
   }
+*/
 
   function addButtonForm() {
-    return STORE.adding ? `
-        <form class="text-form">
+    return `
+				<fieldset class="js-new-list">
         <div class="form-group">
             <label for="bookmark-title">Title</label>
             <input required type="text" id="bookmark-title" name="bookmark-title" placeholder="e.g. Google">
@@ -47,39 +51,55 @@ const bookmarkList = (function() {
             <input type="radio" class="form-check" id="rating-value" name="same" value="5">
             <label class="form-check-label" for="5">5</label>
         </div>
-        <div class="form-group">
             <label for="bookmark-description">Description</label>
-            <input required type="text" class="form-description" id="bookmark-description" placeholder="Your description">
-        </div>
-        <button type="submit" class="submit-button">Submit</button>
-        <button class="cancel-button">Cancel</button>
-        </form>
-        ` : '';
-	}
+            <textarea required rows="5" cols="50" class="form-description" id="bookmark-description" placeholder="Your description"></textarea>
+				<div class="form-group" id="bookmark-buttons">
+						<button type="submit" class="submit-button">Submit</button>
+						<button class="cancel-button">Cancel</button>
+				</div>
+				</fieldset>
+        `;
+  }
 	
-	function getBookmarkValues() {
-		$('.submit-button').submit(function(event) {
-			event.preventDefault();
-			const title = $('#bookmark-title').val();
-			const url = $('#bookmark-url').val();
-			const description = $('#bookmark-description').val();
-			//const rating = $('#bookmark-rating').val();
-		})
-	}
+  function generateBookmarkList(bookmark) {
+    return `
+		<li class="bookmark-item data-item-id=${bookmark.id}">
+		`;
+  }
 	
-  function cancelFormButton() {
-    $('.bookmark-list').on('click', '.cancel-button', function(event) {
+  function getBookmarkValues() {
+    $('.submit-button').submit( () => {
       event.preventDefault();
-      $('.text-form').remove();
+      const title = $('#bookmark-title').val();
+      const url = $('#bookmark-url').val();
+      const description = $('#bookmark-description').val();
+      //const rating = $('#bookmark-rating').val();
+      const item = {
+        title,
+        url,
+        description,
+        rating
+      };
+    });
+  }
+	
+
+  function cancelFormButton() {
+    $('.new-list').on('click', '.cancel-button', event => {
+      event.preventDefault();
+      $('.js-new-list').remove();
       STORE.toggleAdding();
     });
   }
 
+  //This function gets the items in the store.items.
+  //It is then mapped into array and generated to html by invoking generateBookmarkList()
   function generateBookmarkItems(bookmarkList) {
-    const lists = bookmarkList.map(item => addButtonForm(item));
+    const lists = bookmarkList.map(item => generateBookmarkList(item));
     return lists.join('');
   }
 
+  //Non-functional
   function render() {
     let lists = [...STORE.lists];
     //if (STORE.rating)
@@ -90,15 +110,31 @@ const bookmarkList = (function() {
     // Inserts HTML into the DOM
     $('.bookmark-list').html(bookmarkListString);
   }
+	
+  function getIdFromElement(item) {
+    return $(item)
+      .closest('.bookmark-item')
+      .data('item-id');
+  }
 
-  function init() {
+  function handleNewBookmarkSubmit() {
+
+  }
+
+  function handleDeleteBookmarkClick() {
+
+  }
+
+  function eventListeners() {
     addButtonForm();
     cancelFormButton();
     toggleForm();
+    handleDeleteBookmarkClick();
+    handleNewBookmarkSubmit();
   }
 
   return {
     render,
-    init
+    eventListeners
   };
 } ());

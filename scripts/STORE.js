@@ -1,19 +1,19 @@
 'use strict';
-/* global  */
+/* global STORE */
 // eslint-disable-next-line no-unused-vars
 
 const STORE = (function() {
 
   const addList = function(bookmark) {
-    this.lists.push(bookmark)
+    this.lists.push(bookmark);
   };
 
-  const deleteList = function(id) {
+  const findAndDelete = function(id) {
     this.lists = this.lists.filter(item => item.id !== id);
   };
 
   const findById = function(id) {
-
+    return this.lists.find(item => item.id === id);
   };
 
   const toggleAdding = function() {
@@ -25,7 +25,7 @@ const STORE = (function() {
     adding: false,
     //rating,
     addList,
-    deleteList,
+    findAndDelete,
     findById,
     toggleAdding
   };
