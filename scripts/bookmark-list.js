@@ -1,7 +1,8 @@
+/* eslint-disable  */
 'use strict';
 /* global api, STORE, $ */
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars no-console
 
 const bookmarkList = (function() {
 
@@ -46,8 +47,10 @@ const bookmarkList = (function() {
             <input type="radio" class="form-check" id="rating-value" name="rating" value="0">
             <label class="form-check-label" for="5">5</label>
         </div>
+        <div class="fieldset-description">
             <label class="bookmark-description" for="bookmark-description">Description</label>
             <textarea required rows="5" cols="50" class="form-description" name="desc" id="bookmark-description" placeholder="Your description"></textarea>
+        </div>    
 				<div class="form-group" id="bookmark-buttons">
 						<button type="submit" class="submit-button">Submit</button>
 						<button class="cancel-button">Cancel</button>
@@ -137,15 +140,15 @@ const bookmarkList = (function() {
   function render() {
     //if (STORE.rating)
     let lists = [...STORE.lists];
-    // renders bookmark list to the DOM
-    const bookmarkListString = generateBookmarkItems(lists);
 
     // Inserts HTML into the DOM
-    $('.bookmark-list').html(bookmarkListString);
-    
     if(STORE.filterBy) {
-      lists = STORE.lists.filter(item => item.rating > STORE.filterBy);
+      lists = lists.filter(item => item.rating > STORE.filterBy);
+      console.log(lists);
     }
+    // renders bookmark list to the DOM
+    const bookmarkListString = generateBookmarkItems(lists);
+    $('.bookmark-list').html(bookmarkListString);
   }
 	
   function getIdFromElement(item) {
@@ -188,26 +191,20 @@ const bookmarkList = (function() {
     $('.bookmark-list').on('click', '.js-bookmark-title', event => {
       const ID = getIdFromElement(event.currentTarget);
       const currentList = STORE.findById(ID);
-      currentList.expanded = true;
+      if (!currentList.expanded) {
+        currentList.expanded = true;
+      } else {
+        currentList.expanded = false;
+      }
       //console.log(currentList.expanded);
       render();
     });
   }
-  //Incomplete/*
-  function handleBookmarkCollapse(){
-    $('.bookmark-list').on('click','.js-bookmark-title', event => {
-      const ID = getIdFromElement(event.currentTarget);
-      const currentList = STORE.findById(ID);
-      currentList.expanded = true;
-      render();
-    });
-  }
-
 
   function handleDeleteBookmarkClick() {
     $('.bookmark-list').on('click', '.js-delete-bookmark', event => {
       const id = getIdFromElement(event.currentTarget);
-      console.log(id)
+      console.log(id);
       api.deleteBookmark(id)
         .then(() => {
           STORE.findAndDelete(id);
@@ -216,13 +213,14 @@ const bookmarkList = (function() {
         .catch(err => {
           STORE.setError(err.message);
           renderError();
-        })
-    })
+        });
+    });
   }
 	
   function handleFilterRating() {
-    $('.bookmark-filter').on('change', function(e) {
+    $('.bookmark-filter').on('change', function() {
       let selectRating = $(this).val();
+      console.log(selectRating);
       STORE.setFilter(selectRating);
       render();
     });
@@ -243,7 +241,6 @@ const bookmarkList = (function() {
     handleNewBookmarkSubmit();
     handleBookmarkExpand();
     handleFilterRating();
-    handleBookmarkCollapse();
     handleCloseError();
   }
 

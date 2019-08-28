@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    padding: 1px;
+    font-family: 'Livvic', sans-serif;
 }
 
 header {
@@ -14,11 +14,29 @@ h1 {
     display: inline-block;
     text-align: center;
     vertical-align: center;
+    font-size: 40px;
+}
+
+h2 {
+    background-color: rgba(204, 204, 204, 0.753);
+    margin: 0 0;
+    text-align: center;
+    padding: 10px; 
+    font-size: 30px;
+}
+
+header {
+    text-decoration: underline;
 }
 
 form {
-    display: block;
+    display: inline-block;
     margin: auto;
+    text-align: center;
+}
+
+form.new-list {
+    display: block;
     text-align: center;
 }
 
@@ -32,20 +50,37 @@ form {
 }
 
 ul {
-    display: inline-block;
+    display: block;
+    justify-content: center;
     text-align: left;
     margin-left: 0%;
+}
+
+ul.bookmarks-list li.expanded {
+    padding: 10px;
 }
 
 ul .bookmark-list-item {
     display: block;
     border-radius: 2px;
+    border: 2px solid #ccc;
     list-style-type: none;
-    margin-bottom: 10px;
+    margin: 10px 10px;
 }
+
+p.js-bookmark-description {
+    margin-bottom: 10px;
+    line-height: 1.5em;
+    overflow: auto;
+    padding: 20px 0;
+  }
 
 .filter-selector {
     display: block;
+    font-size: 25px;
+    margin: 5px 5px;
+    padding: 10px;
+    padding-bottom: 50px;
     text-decoration: underline;
 }
 
@@ -108,10 +143,12 @@ ul .bookmark-list-item {
 .rated-stars span {
     position: relative;
     color: #ccc;
+    font-size: 2.5em
 }
 
 .rated-stars span.checked {
     color: #ecba14;
+    font-size: 2.5em;
 }
 
 .js-bookmark-url {
@@ -151,6 +188,8 @@ ul .bookmark-list-item {
 
 .js-bookmark-title {
     display: inline-block;
+    text-align: left;
+    width: 100%;
 }
 
 .error-container {
@@ -161,15 +200,46 @@ ul .bookmark-list-item {
 
 fieldset {
     display:block;
+    text-align: center;
+    margin: 0px 50px;
+}
+
+.fieldset-description {
+    display: block;
+    text-align: center;
 }
 
 .bookmark-description, .bookmark-title, .bookmark-url, .bookmark-rating{
+    text-align: center;
     display: block;
 }
 
 ul.bookmark-list {
-    border: 2px solid rgba(204, 204, 204, 0.685);
     background-color: rgba(255, 255, 255, 0.63);
     width: 100%;
+    display: flex;
+    margin: 0px 0px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0px;
+    padding: 10px 40px 10px 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-content: space-between;
 }
 
+h2:hover {
+    background-color: rgba(116, 116, 116, 0.692);
+}
+
+@media only screen and (min-width: 768px){
+    li, header, form, fieldset, h2 {
+        font-size: 2vw;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    li, header, form, fieldset, h2 {
+        font-size: 2vw;
+    } 
+}
