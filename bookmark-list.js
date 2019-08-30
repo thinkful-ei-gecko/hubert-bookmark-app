@@ -5,7 +5,6 @@
 // eslint-disable-next-line no-unused-vars no-console
 
 const bookmarkList = (function() {
-
 	
   function toggleForm() {
     $('.toggle-form').on('click', event => {
@@ -28,7 +27,7 @@ const bookmarkList = (function() {
         </div>
         <div class="form-group">
             <label class="bookmark-url" for="bookmark-url">URL</label>
-            <input required type="text" id="bookmark-url" name="url" placeholder="http://www.google.com" disable="false" id="bookmark-url">
+            <input required type="url" id="bookmark-url" name="url" placeholder="http://www.google.com" disable="false" id="bookmark-url">
         </div>
         <div class="form-group" id="bookmark-rating">
             <label class="bookmark-rating" for="bookmark-rating">Rating</label>
@@ -117,16 +116,18 @@ const bookmarkList = (function() {
     return lists.join('');
   }
 
-  //INCOMPLETE
+  //Shows an error message when necessary
   function renderError() {
     if(STORE.error) {
       const el = generateError(STORE.error);
       $('.error-container').html(el);
+      render();
     } else {
       $('.error-container').empty();
     }
   }
 
+  //Generates an HTML error message
   function generateError(errorMessage) {
     return `
     <section class="error-content">
@@ -136,7 +137,6 @@ const bookmarkList = (function() {
     `;
   }
 
-  //Non-functional
   function render() {
     //if (STORE.rating)
     let lists = [...STORE.lists];
@@ -166,11 +166,9 @@ const bookmarkList = (function() {
     return JSON.stringify(o);
   }
 
-  //Does not send data to API
   function handleNewBookmarkSubmit() {
     $('body').on('submit', '.new-list', event => {
       event.preventDefault();
-
       let formElement = $('.new-list')[0];
       let serial = serializeJson(formElement);
 		
@@ -184,6 +182,9 @@ const bookmarkList = (function() {
           STORE.setError(err.message);
           renderError();
         });
+      $('.js-new-list').remove();
+      STORE.adding = !STORE.adding;
+      render();    
     });
   }
   
@@ -196,7 +197,6 @@ const bookmarkList = (function() {
       } else {
         currentList.expanded = false;
       }
-      //console.log(currentList.expanded);
       render();
     });
   }
