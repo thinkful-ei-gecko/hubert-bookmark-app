@@ -43,7 +43,7 @@ const bookmarkList = (function() {
             <input type="radio" class="form-check" id="rating-value" name="rating" value="4">
             <label class="form-check-label" for="4">4</label>
 
-            <input type="radio" class="form-check" id="rating-value" name="rating" value="0">
+            <input type="radio" class="form-check" id="rating-value" name="rating" value="5">
             <label class="form-check-label" for="5">5</label>
         </div>
         <div class="fieldset-description">
